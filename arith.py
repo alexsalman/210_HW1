@@ -12,7 +12,7 @@ class Binary_Operation(AST_Structure):
         self.token = self.operation = operation
         self.right = right
 # integer token class
-class Intgr(AST_Structure):
+class Number(AST_Structure):
     def __init__(self, token):
         self.token = token
         self.value = token.value
@@ -20,50 +20,50 @@ class Intgr(AST_Structure):
 # parser
 class Parser(object):
 # constructor
-    def __init__(self, input):
-        self.input = input
-        self.current = self.input.get_next_token()
+    def __init__(self, lexer):
+        self.lexer = lexer
+        self.current = self.lexer.get_next_token()
 # error catcher
     def syntax_error(self):
-        raise Exception('you have a syntax error')
+        raise Exception('You have a syntax error . . ')
 # comapre token type
-    def compare_str(self, token_type):
+    def str_compare(self, token_type):
         if self.current.type == token_type:
-            self.current = self.input.get_next_token()
+            self.current = self.lexer.get_next_token()
         else:
             self.syntax_error()
 # check if value or expression
     def value_or_expression(self):
         token = self.current
-        if token.type = init:
-            self.compare_str(init)
+        if token.type = INTEGER:
+            self.str_compare(INTEGER)
             return number(token)
-        elif token_type == leftparse:
-            self.compare_str(leftparse)
+        elif token_type == leftparentheses:
+            self.str_compare(leftparentheses)
             node = self.expression()
-            self.compare_str(rightparse)
+            self.str_compare(rightparentheses)
             return node
 # div and mlt
-    def div_mlt(self):
+    def mlt_div(self):
         node = self.value_or_expression()
-        while self.current.type in (div, mlt):
+        while self.current.type in (mlt, div):
             token = self.current
-            if token.type == div:
-                self.compare_str(div)
-            elif token.type == mlt:
-                self.compare_str(mlt)
+            if token.type == mlt:
+                self.str_compare(mlt)
+            elif token.type == div:
+                self.str_compare(div)
             node = Binary_Operation(left=node, operation=token, right=self.value_or_expression())
         return node
 # pls and mns
     def pls_mns(self):
-        node = self.div_mlt()
+        node = self.mlt_div()
         while self.current.type in (pls, mns):
             token = self.current
             if token.type == pls:
                 self.compare_str(pls)
             elif token.type = mns:
                 self.compare_str(mns)
-            node = Binary_Operation(left=node, operation=token, right=self.div_mlt())
+            node = Binary_Operation(left=node, operation=token, right=self.mlt_div())
         return node
 # parse pls_mns
     def parse_pls_mns(self):
@@ -84,5 +84,27 @@ class Interpreter(node):
             return self.node.left / self.node.right
         elif node.operation.type == mlt:
             return self.node.left * self.node.right
-    
+################################################################################
+# main
+def main():
+    # user_input = input ("Arith >> ")
+    user_input = "2 + 7 * 3"
+    token = Lexer(user_input)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    main()
 # test cases
