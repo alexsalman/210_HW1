@@ -1,6 +1,11 @@
 # Alex Salman 1/10/2021 aalsalma@ucsc.edu
 # used the blog of Ruslan Spivak https://ruslanspivak.com/lsbasi-part7/
 ################################################################################
+
+################################################################################
+INTEGER, pls, mns, mlt, div, leftparentheses, rightparentheses, EOF = (
+'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF')
+################################################################################
 # data structure
 class AST_Structure(object):
     pass
@@ -35,9 +40,9 @@ class Parser(object):
 # check if value or expression
     def value_or_expression(self):
         token = self.current
-        if token.type = INTEGER:
+        if token.type == INTEGER:
             self.str_compare(INTEGER)
-            return number(token)
+            return Number(token)
         elif token_type == leftparentheses:
             self.str_compare(leftparentheses)
             node = self.expression()
@@ -60,9 +65,9 @@ class Parser(object):
         while self.current.type in (pls, mns):
             token = self.current
             if token.type == pls:
-                self.compare_str(pls)
-            elif token.type = mns:
-                self.compare_str(mns)
+                self.str_compare(pls)
+            elif token.type == mns:
+                self.str_compare(mns)
             node = Binary_Operation(left=node, operation=token, right=self.mlt_div())
         return node
 # parse pls_mns
@@ -70,39 +75,114 @@ class Parser(object):
         return self.pls_mns()
 ################################################################################
 # interpreter for tree traversal, AST
-class Interpreter(object):
+class Node(object):
+    def visit(self, node):
+        method_name = 'visit_' + type(node).__name__
+        visitor = getattr(self, method_name, self.generic_visit)
+        return visitor(node)
+
+    def generic_visit(self, node):
+        raise Exception('No visit_{} method'.format(type(node).__name__))
+
+class Interpreter(Node):
 # constructor
-    def __init__(self, parse_pls_mns):
+    def __init__(self, parsing_node):
         self.parsing_node = parsing_node
 # check if children equels either of the arithmatic operations
-    def interpret_Binary_Operation(self, node):
+    def visit_Binary_Operation(self, node):
         if node.operation.type == pls:
-            return self.node.left + self.node.right
+            return self.visit(node.left) + self.visit(node.right)
         elif node.operation.type == mns:
-            return self.node.left - self.node.right
+            return self.visit(node.left) - self.visit(node.right)
         elif node.operation.type == div:
-            return self.node.left / self.node.right
+            return self.visit(node.left) / self.visit(node.right)
         elif node.operation.type == mlt:
-            return self.node.left * self.node.right
+            return self.visit(node.left) * self.visit(node.right)
 # get number value
-    def number_value(self, node):
+    def visit_Number(self, node):
         return node.value
 
     def interpreter(self):
         ast_tree = self.parsing_node.parse_pls_mns()
-        return = ast_tree
+        return self.visit(ast_tree)
+################################################################################
+# tokenizer
+class Token(object):
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
 
+    def __str__(self):
+        return 'Token({type}, {value})'.format(type=self.type, value=repr(self.value))
+
+    def __repr__(self):
+        return self.__str__()
+
+class Tokenizer(object):
+# constructor
+    def __init__(self, user_input):
+        self.user_input = user_input
+        self.pos = 0
+        self.current_char = self.user_input[self.pos]
+
+    def syntax_error(self):
+        raise Exception('You have an invalid character . . ')
+# advance the pointer
+    def advance(self):
+        self.pos += 1
+        if self.pos > len(self.user_input) - 1:
+            self.current_char = None
+        else:
+            self.current_char = self.user_input[self.pos]
+
+    def a_space(self):
+        while self.current_char is not None and self.current_char.isspace():
+            self.advance()
+
+    def integer(self):
+        result = ''
+        while self.current_char is not None and self.current_char.isdigit():
+            result += self.current_char
+            self.advance()
+        return int(result)
+
+    def get_next_token(self):
+        while self.current_char is not None:
+            if self.current_char.isspace():
+                self.a_space()
+                continue
+            if self.current_char.isdigit():
+                return Token(INTEGER, self.integer())
+            if self.current_char == '+':
+                self.advance()
+                return Token(pls, '+')
+            if self.current_char == '-':
+                self.advance()
+                return Token(mns, '-')
+            if self.current_char == '*':
+                self.advance()
+                return Token(mlt, '*')
+            if self.current_char == '/':
+                self.advance()
+                return Token(div, '/')
+            if self.current_char == '(':
+                self.advance()
+                return Token(leftparentheses, '(')
+            if self.current_char == ')':
+                self.advance()
+                return Token(rightparentheses, ')')
+            self.error()
+        return Token(EOF, None)
 ################################################################################
 # main
 def main():
-    # user_input = input ("Arith >> ")
-    user_input = "2 + 7 * 3"
-    token = Lexer(user_input)
+    user_input = input ("Arith >> ")
+    #user_input = "2 + 7 * 3 / 4"
+    token = Tokenizer(user_input)
     parsing_node = Parser(token)
     interpreter = Interpreter(parsing_node)
-    res = interpreter.interpreter()
-    print(res)
+    to_print = interpreter.interpreter()
+    print(to_print)
 
 if __name__ == '__main__':
     main()
-# test cases
