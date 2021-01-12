@@ -70,10 +70,10 @@ class Parser(object):
         return self.pls_mns()
 ################################################################################
 # interpreter for tree traversal, AST
-class Interpreter(node):
+class Interpreter(object):
 # constructor
     def __init__(self, parse_pls_mns):
-        self.parse_pls_mns = parse_pls_mns
+        self.parsing_node = parsing_node
 # check if children equels either of the arithmatic operations
     def interpret_Binary_Operation(self, node):
         if node.operation.type == pls:
@@ -84,26 +84,24 @@ class Interpreter(node):
             return self.node.left / self.node.right
         elif node.operation.type == mlt:
             return self.node.left * self.node.right
+# get number value
+    def number_value(self, node):
+        return node.value
+
+    def interpreter(self):
+        ast_tree = self.parsing_node.parse_pls_mns()
+        return = ast_tree
+
 ################################################################################
 # main
 def main():
     # user_input = input ("Arith >> ")
     user_input = "2 + 7 * 3"
     token = Lexer(user_input)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    parsing_node = Parser(token)
+    interpreter = Interpreter(parsing_node)
+    res = interpreter.interpreter()
+    print(res)
 
 if __name__ == '__main__':
     main()
