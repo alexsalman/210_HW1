@@ -21,6 +21,12 @@ class Number(AST_Structure):
     def __init__(self, token):
         self.token = token
         self.value = token.value
+
+# new add
+class UnaryOp(AST_Structure):
+    def __init__(self, operation, expr):
+        self.token = self.operation = operation
+        self.expr = expr
 ################################################################################
 # parser
 class Parser(object):
@@ -40,7 +46,17 @@ class Parser(object):
 # check if value or expression
     def value_or_expression(self):
         token = self.current
-        if token.type == INTEGER:
+
+        if token.type == pls:
+            self.str_compare(pls)
+            node = UnaryOp(token, self.value_or_expression())
+            return node
+        elif token.type == mns:
+            self.str_compare(mns)
+            node = UnaryOp(token, self.value_or_expression())
+            return node
+
+        elif token.type == INTEGER:
             self.str_compare(INTEGER)
             return Number(token)
         elif token.type == leftparentheses:
@@ -84,6 +100,13 @@ class Node(object):
     def generic_visit(self, node):
         raise Exception('No visit_{} method'.format(type(node).__name__))
 
+    def visit_UnaryOp(self, node):
+        op = node.operation.type
+        if op == pls:
+            return +self.visit(node.expr)
+        elif op == mns:
+            return -self.visit(node.expr)
+
 class Interpreter(Node):
 # constructor
     def __init__(self, parsing_node):
@@ -93,7 +116,7 @@ class Interpreter(Node):
         if node.operation.type == pls:
             return self.visit(node.left) + self.visit(node.right)
         elif node.operation.type == mns:
-            return int(self.visit(node.left)) - int(self.visit(node.right))
+            return self.visit(node.left) - self.visit(node.right)
         elif node.operation.type == div:
             return self.visit(node.left) / self.visit(node.right)
         elif node.operation.type == mlt:
