@@ -43,7 +43,7 @@ class Parser(object):
         if token.type == INTEGER:
             self.str_compare(INTEGER)
             return Number(token)
-        elif token_type == leftparentheses:
+        elif token.type == leftparentheses:
             self.str_compare(leftparentheses)
             node = self.expression()
             self.str_compare(rightparentheses)
@@ -93,7 +93,7 @@ class Interpreter(Node):
         if node.operation.type == pls:
             return self.visit(node.left) + self.visit(node.right)
         elif node.operation.type == mns:
-            return self.visit(node.left) - self.visit(node.right)
+            return int(self.visit(node.left)) - int(self.visit(node.right))
         elif node.operation.type == div:
             return self.visit(node.left) / self.visit(node.right)
         elif node.operation.type == mlt:
