@@ -1,10 +1,7 @@
 # Alex Salman 1/10/2021 aalsalma@ucsc.edu
-# used the blog of Ruslan Spivak https://ruslanspivak.com/lsbasi-part7/
-################################################################################
-
-################################################################################
-INTEGER, pls, mns, mlt, div, leftparentheses, rightparentheses, EOF = (
-'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF')
+# resourses
+# (1) https://ruslanspivak.com/lsbasi-part7/
+# (2) https://ruslanspivak.com/lsbasi-part8/
 ################################################################################
 # data structure
 class AST_Structure(object):
@@ -21,8 +18,7 @@ class Number(AST_Structure):
     def __init__(self, token):
         self.token = token
         self.value = token.value
-
-# new add
+# to handle number with signs - or + with no space (negative and positive integers)
 class UnaryOp(AST_Structure):
     def __init__(self, operation, expr):
         self.token = self.operation = operation
@@ -46,7 +42,6 @@ class Parser(object):
 # check if value or expression
     def value_or_expression(self):
         token = self.current
-
         if token.type == pls:
             self.str_compare(pls)
             node = UnaryOp(token, self.value_or_expression())
@@ -55,15 +50,9 @@ class Parser(object):
             self.str_compare(mns)
             node = UnaryOp(token, self.value_or_expression())
             return node
-
         elif token.type == INTEGER:
             self.str_compare(INTEGER)
             return Number(token)
-        elif token.type == leftparentheses:
-            self.str_compare(leftparentheses)
-            node = self.expression()
-            self.str_compare(rightparentheses)
-            return node
 # div and mlt
     def mlt_div(self):
         node = self.value_or_expression()
@@ -96,10 +85,8 @@ class Node(object):
         method_name = 'visit_' + type(node).__name__
         visitor = getattr(self, method_name, self.generic_visit)
         return visitor(node)
-
     def generic_visit(self, node):
         raise Exception('No visit_{} method'.format(type(node).__name__))
-
     def visit_UnaryOp(self, node):
         op = node.operation.type
         if op == pls:
@@ -188,19 +175,15 @@ class Tokenizer(object):
             if self.current_char == '/':
                 self.advance()
                 return Token(div, '/')
-            if self.current_char == '(':
-                self.advance()
-                return Token(leftparentheses, '(')
-            if self.current_char == ')':
-                self.advance()
-                return Token(rightparentheses, ')')
             self.error()
         return Token(EOF, None)
+
+INTEGER, pls, mns, mlt, div, EOF = (
+'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF')
 ################################################################################
 # main
 def main():
     user_input = input ("Arith >> ")
-    #user_input = "2 + 7 * 3 / 4"
     token = Tokenizer(user_input)
     parsing_node = Parser(token)
     interpreter = Interpreter(parsing_node)
