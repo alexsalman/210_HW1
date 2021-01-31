@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Alex Salman 1/10/2021 aalsalma@ucsc.edu
 # resourses
 # (1) https://ruslanspivak.com/lsbasi-part7/
@@ -183,7 +184,7 @@ INTEGER, pls, mns, mlt, div, EOF = (
 ################################################################################
 # main
 def main():
-    user_input = input ("Arith >> ")
+    user_input = input ()
     token = Tokenizer(user_input)
     parsing_node = Parser(token)
     interpreter = Interpreter(parsing_node)

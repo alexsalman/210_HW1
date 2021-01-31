@@ -1,0 +1,60 @@
+alexsalman@Alexs-MacBook-Pro cse210A-asgtest-hw1-arith % git log
+commit fa15198a0ed1d675822f6246ce1d8eb19e8a9773 (HEAD -> master)
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Wed Jan 13 11:06:52 2021 -0800
+
+    Some code clean up before testing
+
+commit fb757fd4582777ad916e69d1cc15f7b19c24b0b6
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Tue Jan 12 23:47:56 2021 -0800
+
+    Problem solved! I think. I need to run all tests
+
+commit f75a27e99afe98e99256d21e1a0da6d0308c7a22
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Tue Jan 12 22:17:49 2021 -0800
+
+    Negative is not working
+
+commit 535d666f83651e5d05e7387ce77a10036d411161
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Tue Jan 12 00:03:34 2021 -0800
+
+    Tokenizer
+
+commit e7d8e2390d00bd393211de79eddfae9f01c5bcc5
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Mon Jan 11 20:32:04 2021 -0800
+
+    Interpreter adjustment
+
+commit de39f711e1041774ab78f528bfd1473dfc589925
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Mon Jan 11 19:22:03 2021 -0800
+
+    Parser adjustment
+
+commit c438dc70bd0683f25d01a21f97850f508db83f8f
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Sun Jan 10 13:32:14 2021 -0800
+
+    Interpreter
+
+commit 2dacc1ba26c2529ee59b209f935fb7f9229660d2
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Sun Jan 10 12:44:03 2021 -0800
+
+    Parser
+
+commit 727675f9d93897385194908de46d461de7ceea0a
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Sun Jan 10 10:54:10 2021 -0800
+
+    Data Structure
+
+commit ac2825bf63405e7fd9fd3d229f444fa8ed96f02f
+Author: Alex Salman <aalsalma@ucsc.edu>
+Date:   Sun Jan 10 10:24:32 2021 -0800
+
+    First Commit
